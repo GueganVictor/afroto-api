@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const Notifications = mongoose.model(
   'Notifications',
@@ -10,10 +10,10 @@ const Notifications = mongoose.model(
     user: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-      }
-    ]
-  })
-)
+        ref: 'User',
+      },
+    ],
+  }),
+);
 
-module.exports = Notifications
+module.exports = Notifications;

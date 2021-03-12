@@ -1,60 +1,61 @@
-const db = require('../models')
-const Notification = db.notification
+const db = require('../models');
 
-exports.index = function (req, res) {
-  Notification.find({}, function (err, notifications) {
-    if (err) { res.json({ status: 'error', message: err }) }
-    res.json({ status: 'success', message: 'Notifications retrieved successfully', data: notifications })
-  })
-}
+const Notification = db.notification;
 
-exports.new = function (req, res) {
-  var notification = new Notification()
-  notification.message = req.body.message
-  notification.deadline = req.body.deadline
-  notification.importance = req.body.importance
-  notification.seen = req.body.seen
-  notification.user = req.body.user
+exports.index = (req, res) => {
+  Notification.find({}, (err, notifications) => {
+    if (err) { res.json({ status: 'error', message: err }); }
+    res.json({ status: 'success', message: 'Notifications retrieved successfully', data: notifications });
+  });
+};
 
-  notification.save(function (err) {
-    if (err) { res.json(err) }
-    res.json({ message: 'New notification created!', data: notification })
-  })
-}
+exports.new = (req, res) => {
+  const notification = new Notification();
+  notification.message = req.body.message;
+  notification.deadline = req.body.deadline;
+  notification.importance = req.body.importance;
+  notification.seen = req.body.seen;
+  notification.user = req.body.user;
 
-exports.view = function (req, res) {
-  Notification.findById(req.params.notification_id, function (err, notification) {
-    if (err) { res.send(err) }
-    res.json({ message: 'Notification details loading..', data: notification })
-  })
-}
+  notification.save((err) => {
+    if (err) { res.json(err); }
+    res.json({ message: 'New notification created!', data: notification });
+  });
+};
 
-exports.update = function (req, res) {
-  Notification.findById(req.params.notification_id, function (err, notification) {
-    if (err) { res.send(err) }
-    notification.message = req.body.message
-    notification.deadline = req.body.deadline
-    notification.importance = req.body.importance
-    notification.seen = req.body.seen
-    notification.user = req.params.notification_id
+exports.view = (req, res) => {
+  Notification.findById(req.params.notification_id, (err, notification) => {
+    if (err) { res.send(err); }
+    res.json({ message: 'Notification details loading..', data: notification });
+  });
+};
 
-    notification.save(function (err) {
-      if (err) { res.json(err) }
-      res.json({ message: 'Notification Info updated', data: notification })
-    })
-  })
-}
+exports.update = (req, res) => {
+  Notification.findById(req.params.notification_id, (err, notification) => {
+    if (err) { res.send(err); }
+    notification.message = req.body.message;
+    notification.deadline = req.body.deadline;
+    notification.importance = req.body.importance;
+    notification.seen = req.body.seen;
+    notification.user = req.params.notification_id;
 
-exports.delete = function (req, res) {
-  Notification.deleteOne({ _id: req.params.notification_id }, function (err, notification) {
-    if (err) { res.send(err) }
-    res.json({ status: 'success', message: 'Notification deleted' })
-  })
-}
+    notification.save((errSave) => {
+      if (errSave) { res.json(errSave); }
+      res.json({ message: 'Notification Info updated', data: notification });
+    });
+  });
+};
 
-exports.getNotificationsByPhotographer = function (req, res) {
-  Notification.find({ user: req.params.user_id }, function (err, notifications) {
-    if (err) { res.json({ status: 'error', message: err }) }
-    res.json({ status: 'success', message: 'Notifications retrieved successfully', data: notifications })
-  })
-}
+exports.delete = (req, res) => {
+  Notification.deleteOne({ _id: req.params.notification_id }, (err) => {
+    if (err) { res.send(err); }
+    res.json({ status: 'success', message: 'Notification deleted' });
+  });
+};
+
+exports.getNotificationsByPhotographer = (req, res) => {
+  Notification.find({ user: req.params.user_id }, (err, notifications) => {
+    if (err) { res.json({ status: 'error', message: err }); }
+    res.json({ status: 'success', message: 'Notifications retrieved successfully', data: notifications });
+  });
+};

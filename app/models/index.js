@@ -1,17 +1,18 @@
-const mongoose = require('mongoose')
-mongoose.Promise = global.Promise
+const mongoose = require('mongoose');
 
-const db = {}
+mongoose.Promise = global.Promise;
 
-db.mongoose = mongoose
+const db = {};
 
-db.user = require('./user.model')
-db.role = require('./role.model')
-db.project = require('./project.model')
-db.notification = require('./notification.model')
-db.badge = require('./badge.model')
-db.request = require('./request.model')
+db.mongoose = mongoose;
 
-db.ROLES = ['user', 'admin']
+db.user = require('./user.model');
+db.role = require('./role.model');
+db.project = require('./project.model');
+db.notification = require('./notification.model');
+db.badge = require('./badge.model');
+db.request = require('./request.model');
 
-module.exports = db
+db.ROLES = ['user', 'admin'];
+
+module.exports = db;
