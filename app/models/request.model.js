@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const Request = mongoose.model(
   'Request',
@@ -10,14 +10,14 @@ const Request = mongoose.model(
     badges: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Badge'
-      }
+        ref: 'Badge',
+      },
     ],
     photographer: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    }
-  })
-)
+      ref: 'User',
+    },
+  }),
+);
 
-module.exports = Request
+module.exports = Request;

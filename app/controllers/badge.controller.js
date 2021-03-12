@@ -1,49 +1,50 @@
-const db = require('../models')
-const Badge = db.badge
+const db = require('../models');
 
-exports.index = function (req, res) {
-  Badge.find({}, function (err, badges) {
-    if (err) { res.json({ status: 'error', message: err }) }
-    res.json({ status: 'success', message: 'Badges retrieved successfully', data: badges })
-  })
-}
+const Badge = db.badge;
 
-exports.new = function (req, res) {
-  var badge = new Badge()
-  badge.name = req.body.name
-  badge.description = req.body.description
-  badge.type = req.body.type
+exports.index = (req, res) => {
+  Badge.find({}, (err, badges) => {
+    if (err) { res.json({ status: 'error', message: err }); }
+    res.json({ status: 'success', message: 'Badges retrieved successfully', data: badges });
+  });
+};
 
-  badge.save(function (err) {
-    if (err) { res.json(err) }
-    res.json({ message: 'New badge created!', data: badge })
-  })
-}
+exports.new = (req, res) => {
+  const badge = new Badge();
+  badge.name = req.body.name;
+  badge.description = req.body.description;
+  badge.type = req.body.type;
 
-exports.view = function (req, res) {
-  Badge.findById(req.params.badge_id, function (err, badge) {
-    if (err) { res.send(err) }
-    res.json({ message: 'Badge details loading..', data: badge })
-  })
-}
+  badge.save((errSave) => {
+    if (errSave) { res.json(errSave); }
+    res.json({ message: 'New badge created!', data: badge });
+  });
+};
 
-exports.update = function (req, res) {
-  Badge.findById(req.params.badge_id, function (err, badge) {
-    if (err) { res.send(err) }
-    badge.name = req.body.name
-    badge.description = req.body.description
-    badge.type = req.body.type
+exports.view = (req, res) => {
+  Badge.findById(req.params.badge_id, (err, badge) => {
+    if (err) { res.send(err); }
+    res.json({ message: 'Badge details loading..', data: badge });
+  });
+};
 
-    badge.save(function (err) {
-      if (err) { res.json(err) }
-      res.json({ message: 'Badge Info updated', data: badge })
-    })
-  })
-}
+exports.update = (req, res) => {
+  Badge.findById(req.params.badge_id, (err, badge) => {
+    if (err) { res.send(err); }
+    badge.name = req.body.name;
+    badge.description = req.body.description;
+    badge.type = req.body.type;
 
-exports.delete = function (req, res) {
-  Badge.deleteOne({ _id: req.params.badge_id }, function (err, badge) {
-    if (err) { res.send(err) }
-    res.json({ status: 'success', message: 'Badge deleted' })
-  })
-}
+    badge.save((errSave) => {
+      if (errSave) { res.json(errSave); }
+      res.json({ message: 'Badge Info updated', data: badge });
+    });
+  });
+};
+
+exports.delete = (req, res) => {
+  Badge.deleteOne({ _id: req.params.badge_id }, (err) => {
+    if (err) { res.send(err); }
+    res.json({ status: 'success', message: 'Badge deleted' });
+  });
+};

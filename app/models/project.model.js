@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const Project = mongoose.model(
   'Project',
@@ -19,10 +19,10 @@ const Project = mongoose.model(
     photographer: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-      }
-    ]
-  })
-)
+        ref: 'User',
+      },
+    ],
+  }),
+);
 
-module.exports = Project
+module.exports = Project;

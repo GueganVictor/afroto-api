@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const User = mongoose.model(
   'User',
@@ -18,16 +18,16 @@ const User = mongoose.model(
     badges: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Badge'
-      }
+        ref: 'Badge',
+      },
     ],
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Role'
-      }
-    ]
-  })
-)
+        ref: 'Role',
+      },
+    ],
+  }),
+);
 
-module.exports = User
+module.exports = User;
