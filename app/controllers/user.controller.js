@@ -1,9 +1,15 @@
-const User = require('../models/user.model');
+const db = require('../models');
+
+const Role = db.role;
+const User = db.user;
 
 exports.getPhotographers = (req, res) => {
-  User.find({ roles: '603d1dc49f4c03022333c728' }).populate('badges').exec((errFind, notifications) => {
-    if (errFind) { res.json({ status: 'error', message: errFind }); }
-    res.json({ status: 'success', message: 'Photographers retrieved successfully', data: notifications });
+  Role.find({ name: 'user' }, (errRole, role) => {
+    if (errRole) { res.status(500).send({ message: errRole }); }
+    User.find({ roles: role._id }).populate('badges').exec((errFind, notifications) => {
+      if (errFind) { res.json({ status: 'error', message: errFind }); }
+      res.json({ status: 'success', message: 'Photographers retrieved successfully', data: notifications });
+    });
   });
 };
 

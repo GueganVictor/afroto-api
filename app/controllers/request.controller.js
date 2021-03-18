@@ -31,17 +31,6 @@ exports.view = (req, res) => {
   });
 };
 
-exports.setState = (req, res) => {
-  Request.findById(req.body.request_id, (errFind, request) => {
-    if (errFind) { res.send(errFind); }
-    request.state = req.body.state;
-    request.save((errSave) => {
-      if (errSave) { res.json(errSave); }
-      res.json({ message: 'Request state changed', data: request });
-    });
-  });
-};
-
 exports.update = (req, res) => {
   Request.findById(req.params.request_id, (errFind, request) => {
     if (errFind) { res.send(errFind); }
@@ -60,5 +49,16 @@ exports.delete = (req, res) => {
   Request.deleteOne({ _id: req.params.request_id }, (errDelete) => {
     if (errDelete) { res.send(errDelete); }
     res.json({ status: 'success', message: 'Request deleted' });
+  });
+};
+
+exports.setState = (req, res) => {
+  Request.findById(req.params.request_id, (errFind, request) => {
+    if (errFind) { res.send(errFind); }
+    request.state = req.params.state;
+    request.save((errSave) => {
+      if (errSave) { res.json(errSave); }
+      res.json({ message: 'Request state changed', data: request });
+    });
   });
 };

@@ -77,23 +77,23 @@ exports.delete = (req, res) => {
 };
 
 exports.setPhotographer = (req, res) => {
-  Project.findById(req.body.project_id, (errFind, project) => {
+  Project.findById(req.params.project_id, (errFind, project) => {
     if (errFind) { res.send(errFind); }
-    project.photographer = req.body.photographer_id;
+    project.photographer = req.params.user_id;
     project.save((errSave) => {
       if (errSave) { res.json(errSave); }
-      setNotification(req.body.photographer_id);
-      User.findById(req.body.photographer_id, (errFindUser, user) => {
+      setNotification(req.params.user_id);
+      User.findById(req.params.user_id, (errFindUser, user) => {
         if (errFindUser) { res.json(errFindUser); }
         mailer.newProjectMail(user);
       });
-      res.json({ message: 'Added Photogpraher', data: project });
+      res.json({ message: 'Added Photographer', data: project });
     });
   });
 };
 
 exports.getProjectByPhotographer = (req, res) => {
-  Project.find({ photographer: { _id: req.params.project_id } }, (errFind, notifications) => {
+  Project.find({ photographer: { _id: req.params.user_id } }, (errFind, notifications) => {
     if (errFind) { res.json({ status: 'error', message: errFind }); }
     res.json({ status: 'success', message: 'Projects retrieved successfully', data: notifications });
   });
@@ -102,6 +102,7 @@ exports.getProjectByPhotographer = (req, res) => {
 exports.validateProject = (req, res) => {
   Project.findById(req.params.project_id, (errFind, project) => {
     if (errFind) { res.send(errFind); }
+    if (project.status === 'Fini') { res.json({ status: 'error', message: 'Project was already closed' }); }
     project.pictures = req.body.url;
     project.status = 'Fini';
     project.save((errSave) => {
