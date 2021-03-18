@@ -62,7 +62,7 @@ exports.signup = (req, res) => {
 };
 
 exports.signin = (req, res) => {
-  User.findOne({ username: req.body.username }).populate('badges').populate('-__v').populate('roles')
+  User.findOne({ $or: [{ email: req.body.username }, { username: req.body.username }] }).populate('badges').populate('-__v').populate('roles')
     .exec((err, user) => {
       if (err) {
         console.log(err);

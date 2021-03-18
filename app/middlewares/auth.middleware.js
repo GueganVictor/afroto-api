@@ -6,7 +6,9 @@ const Role = db.role;
 
 const verifyToken = (req, res, next) => {
   const token = req.headers['x-access-token'];
+  const nonSecurePaths = ['api/auth/login', 'api/auth/register'];
 
+  if (nonSecurePaths.includes(req.path)) return next();
   if (!token) {
     return res.status(403).send({ message: 'No token provided!' });
   }
@@ -37,7 +39,7 @@ const isAdmin = (req, res, next) => {
       for (let i = 0; i < roles.length; i += 1) {
         if (roles[i].name === 'admin') {
           next();
-          return;
+          return true;
         }
       }
       res.status(403).send({ message: 'Permission denied!' });
@@ -45,7 +47,17 @@ const isAdmin = (req, res, next) => {
   });
 };
 
+const isSameUserAsRequested = (req, res, next) => {
+  if (isAdmin(req, res, next)) {
+    next();
+  } else {
+    // TODO check if the user who issued the request is the same as the requested user
+    // check if req.params.user_id
+  }
+};
+
 module.exports = {
   verifyToken,
   isAdmin,
+  isSameUserAsRequested,
 };

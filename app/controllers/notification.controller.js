@@ -53,7 +53,7 @@ exports.delete = (req, res) => {
   });
 };
 
-exports.getNotificationsByPhotographer = (req, res) => {
+exports.getNotificationsByUser = (req, res) => {
   Notification.find({ user: req.params.user_id }, (err, notifications) => {
     if (err) { res.json({ status: 'error', message: err }); }
     res.json({ status: 'success', message: 'Notifications retrieved successfully', data: notifications });

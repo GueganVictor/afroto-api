@@ -31,13 +31,7 @@ db.mongoose
   });
 
 // Routes
-
-require('./app/routes/user.routes')(app);
-require('./app/routes/auth.routes')(app);
-require('./app/routes/badge.routes')(app);
-require('./app/routes/notification.routes')(app);
-require('./app/routes/project.routes')(app);
-require('./app/routes/request.routes')(app);
+require('./app/routes/routes')(app);
 
 // Listen
 
