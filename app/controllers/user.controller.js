@@ -4,8 +4,8 @@ const Role = db.role;
 const User = db.user;
 
 exports.getPhotographers = (req, res) => {
-  Role.find({ name: 'user' }, (errRole, role) => {
-    if (errRole) { res.status(500).send({ message: errRole }); }
+  Role.findOne({ name: 'user' }, (errRole, role) => {
+    if (errRole) { res.status(500).send({ message: errRole }); return; }
     User.find({ roles: role._id }).populate('badges').exec((errFind, photographer) => {
       if (errFind) { res.json({ status: 'error', message: errFind }); }
       res.json({ status: 'success', message: 'Photographers retrieved successfully', data: photographer });
@@ -15,14 +15,14 @@ exports.getPhotographers = (req, res) => {
 
 exports.getPhotographer = (req, res) => {
   User.findOne({ _id: req.params.user_id }, (errFind, photographer) => {
-    if (errFind) { res.json({ status: 'error', message: errFind }); }
+    if (errFind) { res.json({ status: 'error', message: Object.assign(errFind, { infos: 'UserNotFound' }) }); return; }
     res.json({ status: 'success', message: 'Photographer retrieved successfully', data: photographer });
   });
 };
 
 exports.updatePhotographer = (req, res) => {
   User.findById(req.params.user_id, (errFind, user) => {
-    if (errFind) { res.send(errFind); }
+    if (errFind) { res.send(errFind); return; }
     user.name = req.body.name;
     user.email = req.body.email;
     user.birthdate = req.body.birthdate;
@@ -40,7 +40,7 @@ exports.updatePhotographer = (req, res) => {
 
 exports.addEquipment = (req, res) => {
   User.findById(req.params.user_id, (errFind, user) => {
-    if (errFind) { res.send(errFind); }
+    if (errFind) { res.send(errFind); return; }
     if (req.params.type === 'camera') {
       user.cameras.push(req.params.equipment);
     } else {
@@ -56,14 +56,14 @@ exports.addEquipment = (req, res) => {
 
 exports.deletePhotographer = (req, res) => {
   User.deleteOne({ _id: req.params.user_id }, (errDelete) => {
-    if (errDelete) { res.send(errDelete); }
+    if (errDelete) { res.send(errDelete); return; }
     res.json({ status: 'success', message: 'User deleted' });
   });
 };
 
 exports.deleteEquipment = (req, res) => {
   User.findById(req.params.user_id, (errFind, user) => {
-    if (errFind) { res.send(errFind); }
+    if (errFind) { res.send(errFind); return; }
     if (req.params.type === 'camera') {
       user.cameras = user.cameras.filter((item) => item !== req.params.equipment);
     } else {

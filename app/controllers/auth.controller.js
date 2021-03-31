@@ -7,7 +7,6 @@ const User = db.user;
 const Role = db.role;
 
 exports.signup = (req, res) => {
-  console.log(req.body);
   const user = new User({
     name: req.body.name,
     email: req.body.email,
@@ -65,7 +64,6 @@ exports.signin = (req, res) => {
   User.findOne({ $or: [{ email: req.body.username }, { username: req.body.username }] }).populate('badges').populate('-__v').populate('roles')
     .exec((err, user) => {
       if (err) {
-        console.log(err);
         res.status(500).send({ message: err });
         return;
       }

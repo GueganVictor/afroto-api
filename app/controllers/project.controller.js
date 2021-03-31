@@ -8,7 +8,7 @@ const mailer = require('./mail.controller');
 
 exports.index = (req, res) => {
   Project.find({}, (errFind, notifications) => {
-    if (errFind) { res.json({ status: 'error', message: errFind }); }
+    if (errFind) { res.json({ status: 'error', message: errFind }); return; }
     res.json({ status: 'success', message: 'Projects retrieved successfully', data: notifications });
   });
 };
@@ -39,7 +39,7 @@ exports.new = (req, res) => {
 
 exports.view = (req, res) => {
   Project.findById(req.params.project_id, (errFind, project) => {
-    if (errFind) { res.send(errFind); }
+    if (errFind) { res.send(errFind); return; }
     res.json({
       message: 'Project details loading..',
       data: project,
@@ -49,7 +49,7 @@ exports.view = (req, res) => {
 
 exports.update = (req, res) => {
   Project.findById(req.params.project_id, (errFind, project) => {
-    if (errFind) { res.send(errFind); }
+    if (errFind) { res.send(errFind); return; }
     project.name = req.body.name;
     project.type = req.body.type;
     project.email = req.body.email;
@@ -78,7 +78,7 @@ exports.delete = (req, res) => {
 
 exports.setPhotographer = (req, res) => {
   Project.findById(req.params.project_id, (errFind, project) => {
-    if (errFind) { res.send(errFind); }
+    if (errFind) { res.send(errFind); return; }
     project.photographer = req.params.user_id;
     project.save((errSave) => {
       if (errSave) { res.json(errSave); }
@@ -94,14 +94,14 @@ exports.setPhotographer = (req, res) => {
 
 exports.getProjectByPhotographer = (req, res) => {
   Project.find({ photographer: { _id: req.params.user_id } }, (errFind, notifications) => {
-    if (errFind) { res.json({ status: 'error', message: errFind }); }
+    if (errFind) { res.json({ status: 'error', message: errFind }); return; }
     res.json({ status: 'success', message: 'Projects retrieved successfully', data: notifications });
   });
 };
 
 exports.validateProject = (req, res) => {
   Project.findById(req.params.project_id, (errFind, project) => {
-    if (errFind) { res.send(errFind); }
+    if (errFind) { res.send(errFind); return; }
     if (project.status === 'Fini') { res.json({ status: 'error', message: 'Project was already closed' }); }
     project.pictures = req.body.url;
     project.status = 'Fini';
