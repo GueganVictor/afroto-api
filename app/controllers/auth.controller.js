@@ -7,8 +7,8 @@ const User = db.user;
 const Role = db.role;
 
 exports.signup = (req, res) => {
+  console.log(req.body);
   const user = new User({
-    username: req.body.username,
     name: req.body.name,
     email: req.body.email,
     birthdate: req.body.birthdate,
@@ -84,7 +84,7 @@ exports.signin = (req, res) => {
       }
 
       res.status(200).send({
-        id: user._id,
+        _id: user._id,
         name: user.name,
         username: user.username,
         email: user.email,

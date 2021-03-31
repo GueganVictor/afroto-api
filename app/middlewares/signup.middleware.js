@@ -4,7 +4,7 @@ const { ROLES } = db;
 const User = db.user;
 
 const checkDuplicateUsernameOrEmail = (req, res, next) => {
-  User.findOne({ $or: [{ email: req.body.email }, { username: req.body.username }] })
+  User.findOne({ $or: [{ email: req.body.email }] })
     .exec((err, user) => {
       if (err) {
         res.status(500).send({ message: err });
