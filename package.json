@@ -1,26 +1,44 @@
 {
-  "name": "serv",
+  "name": "afroto-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "REST API for Afroto",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "concurrently \"tsc -w\" \"nodemon dist/js/app.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GueganVictor/afroto-api.git"
   },
   "author": "Victor GUEGAN",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GueganVictor/afroto-api/issues"
+  },
+  "homepage": "https://github.com/GueganVictor/afroto-api#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.11.11",
-    "nodemailer": "^6.4.17",
-    "nodemailer-smtp-transport": "^2.7.4"
+    "mongoose": "^5.12.3"
   },
   "devDependencies": {
-    "eslint": "^7.21.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1"
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.10",
+    "@types/express": "^4.17.11",
+    "@types/jsonwebtoken": "^8.5.1",
+    "@types/mongoose": "^5.10.4",
+    "@types/node": "^14.14.37",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
+    "concurrently": "^6.0.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1"
   }
 }
