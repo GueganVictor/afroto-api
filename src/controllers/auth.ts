@@ -78,30 +78,28 @@ const signin = async (req: Request, res: Response): Promise<void> => {
             },
         );
 
-        res.json({
-            status: 'success',
-            message: 'Users retrieved successfully',
-            data: {
-                _id: user._id,
-                name: user.name,
-                username: user.username,
-                email: user.email,
-                roles: authorities,
-                birthdate: user.birthdate,
-                phone: user.phone,
-                city: user.city,
-                instagram: user.instagram,
-                facebook: user.facebook,
-                cameras: user.cameras,
-                lenses: user.lenses,
-                badges: user.badges,
-                accessToken: jwt.sign({ id: user.id }, process.env.SECRET_KEY || '', {
-                    expiresIn: 86400,
-                }),
-            },
+        res.status(200).json({
+            _id: user._id,
+            name: user.name,
+            username: user.username,
+            email: user.email,
+            roles: authorities,
+            birthdate: user.birthdate,
+            phone: user.phone,
+            city: user.city,
+            instagram: user.instagram,
+            facebook: user.facebook,
+            cameras: user.cameras,
+            lenses: user.lenses,
+            badges: user.badges,
+            accessToken: jwt.sign({ id: user.id }, process.env.SECRET_KEY ?? '', {
+                expiresIn: 86400,
+            }),
         });
     } catch (error) {
         res.json({ status: 'error', message: error });
         return;
     }
 };
+
+export { signin, signup };

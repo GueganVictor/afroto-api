@@ -2,7 +2,7 @@ import { Response, Request } from 'express';
 import { Badge } from './../types/badge';
 import SBadge from './../models/badge';
 
-const index = async (req: Request, res: Response): Promise<void> => {
+const indexBadge = async (req: Request, res: Response): Promise<void> => {
     try {
         const badges: Badge[] = await SBadge.find();
         res.json({ status: 'success', message: 'Badges retrieved successfully', data: badges });
@@ -12,7 +12,7 @@ const index = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-const view = async (req: Request, res: Response): Promise<void> => {
+const viewBadge = async (req: Request, res: Response): Promise<void> => {
     try {
         const badge: Badge | null = await SBadge.findById(req.params.badge_id);
         res.json({ status: 'success', message: 'Badge retrieved successfully', data: badge });
@@ -22,7 +22,7 @@ const view = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-const create = async (req: Request, res: Response): Promise<void> => {
+const createBadge = async (req: Request, res: Response): Promise<void> => {
     try {
         const body = req.body as Pick<Badge, 'name' | 'description' | 'type'>;
 
@@ -35,7 +35,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-const update = async (req: Request, res: Response): Promise<void> => {
+const updateBadge = async (req: Request, res: Response): Promise<void> => {
     try {
         const {
             params: { badge_id },
@@ -50,7 +50,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-const destroy = async (req: Request, res: Response): Promise<void> => {
+const destroyBadge = async (req: Request, res: Response): Promise<void> => {
     try {
         const badge: Badge | null = await SBadge.findByIdAndUpdate(req.params.badge_id);
         res.json({ message: 'Badge deleted', data: badge });
@@ -59,4 +59,4 @@ const destroy = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-export { index, view, create, update, destroy };
+export { indexBadge, viewBadge, createBadge, updateBadge, destroyBadge };
