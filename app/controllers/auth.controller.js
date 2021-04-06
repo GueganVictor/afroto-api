@@ -8,7 +8,6 @@ const Role = db.role;
 
 exports.signup = (req, res) => {
   const user = new User({
-    username: req.body.username,
     name: req.body.name,
     email: req.body.email,
     birthdate: req.body.birthdate,
@@ -65,7 +64,6 @@ exports.signin = (req, res) => {
   User.findOne({ $or: [{ email: req.body.username }, { username: req.body.username }] }).populate('badges').populate('-__v').populate('roles')
     .exec((err, user) => {
       if (err) {
-        console.log(err);
         res.status(500).send({ message: err });
         return;
       }
@@ -84,7 +82,7 @@ exports.signin = (req, res) => {
       }
 
       res.status(200).send({
-        id: user._id,
+        _id: user._id,
         name: user.name,
         username: user.username,
         email: user.email,

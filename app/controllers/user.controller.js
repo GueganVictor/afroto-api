@@ -4,25 +4,25 @@ const Role = db.role;
 const User = db.user;
 
 exports.getPhotographers = (req, res) => {
-  Role.find({ name: 'user' }, (errRole, role) => {
-    if (errRole) { res.status(500).send({ message: errRole }); }
-    User.find({ roles: role._id }).populate('badges').exec((errFind, notifications) => {
+  Role.findOne({ name: 'user' }, (errRole, role) => {
+    if (errRole) { res.status(500).send({ message: errRole }); return; }
+    User.find({ roles: role._id }).populate('badges').exec((errFind, photographer) => {
       if (errFind) { res.json({ status: 'error', message: errFind }); }
-      res.json({ status: 'success', message: 'Photographers retrieved successfully', data: notifications });
+      res.json({ status: 'success', message: 'Photographers retrieved successfully', data: photographer });
     });
   });
 };
 
 exports.getPhotographer = (req, res) => {
-  User.find({ _id: req.params.photographer_id }, (errFind, notifications) => {
-    if (errFind) { res.json({ status: 'error', message: errFind }); }
-    res.json({ status: 'success', message: 'Photographer retrieved successfully', data: notifications });
+  User.findOne({ _id: req.params.user_id }, (errFind, photographer) => {
+    if (errFind) { res.json({ status: 'error', message: Object.assign(errFind, { infos: 'UserNotFound' }) }); return; }
+    res.json({ status: 'success', message: 'Photographer retrieved successfully', data: photographer });
   });
 };
 
 exports.updatePhotographer = (req, res) => {
-  User.findById(req.params.photographer_id, (errFind, user) => {
-    if (errFind) { res.send(errFind); }
+  User.findById(req.params.user_id, (errFind, user) => {
+    if (errFind) { res.send(errFind); return; }
     user.name = req.body.name;
     user.email = req.body.email;
     user.birthdate = req.body.birthdate;
@@ -38,37 +38,36 @@ exports.updatePhotographer = (req, res) => {
   });
 };
 
-exports.addEquipement = (req, res) => {
-  User.findById(req.params.photographer_id, (errFind, user) => {
-    if (errFind) { res.send(errFind); }
-    console.log(req.body.type);
-    if (req.body.type === 'camera') {
-      user.cameras.push(req.body.equipement);
+exports.addEquipment = (req, res) => {
+  User.findById(req.params.user_id, (errFind, user) => {
+    if (errFind) { res.send(errFind); return; }
+    if (req.params.type === 'camera') {
+      user.cameras.push(req.params.equipment);
     } else {
-      user.lenses.push(req.body.equipement);
+      user.lenses.push(req.params.equipment);
     }
 
     user.save((errSave) => {
       if (errSave) { res.json(errSave); }
-      res.json({ message: 'Equipement added', data: user });
+      res.json({ message: 'Equipment added', data: user });
     });
   });
 };
 
 exports.deletePhotographer = (req, res) => {
-  User.deleteOne({ _id: req.params.photographer_id }, (errDelete) => {
-    if (errDelete) { res.send(errDelete); }
+  User.deleteOne({ _id: req.params.user_id }, (errDelete) => {
+    if (errDelete) { res.send(errDelete); return; }
     res.json({ status: 'success', message: 'User deleted' });
   });
 };
 
-exports.deleteEquipement = (req, res) => {
-  User.findById(req.params.photographer_id, (errFind, user) => {
-    if (errFind) { res.send(errFind); }
+exports.deleteEquipment = (req, res) => {
+  User.findById(req.params.user_id, (errFind, user) => {
+    if (errFind) { res.send(errFind); return; }
     if (req.params.type === 'camera') {
-      user.cameras = user.cameras.filter((item) => item !== req.params.equipement);
+      user.cameras = user.cameras.filter((item) => item !== req.params.equipment);
     } else {
-      user.lenses = user.lenses.filter((item) => item !== req.params.equipement);
+      user.lenses = user.lenses.filter((item) => item !== req.params.equipment);
     }
 
     user.save((errSave) => {

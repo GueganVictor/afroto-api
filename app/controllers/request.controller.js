@@ -4,7 +4,7 @@ const Request = db.request;
 
 exports.index = (req, res) => {
   Request.find({}).populate('badges').populate('photographer').exec((errFind, requests) => {
-    if (errFind) { res.json({ status: 'error', message: errFind }); }
+    if (errFind) { res.json({ status: 'error', message: errFind }); return; }
     res.json({ status: 'success', message: 'Requests retrieved successfully', data: requests });
   });
 };
@@ -19,21 +19,21 @@ exports.new = (req, res) => {
   request.type = req.body.type;
 
   request.save((errFind) => {
-    if (errFind) { res.json(errFind); }
+    if (errFind) { res.json(errFind); return; }
     res.json({ message: 'New request created!', data: request });
   });
 };
 
 exports.view = (req, res) => {
   Request.findById(req.params.request_id, (errFind, request) => {
-    if (errFind) { res.send(errFind); }
+    if (errFind) { res.send(errFind); return; }
     res.json({ message: 'Request details loading..', data: request });
   });
 };
 
 exports.update = (req, res) => {
   Request.findById(req.params.request_id, (errFind, request) => {
-    if (errFind) { res.send(errFind); }
+    if (errFind) { res.send(errFind); return; }
     request.name = req.body.name;
     request.description = req.body.description;
     request.type = req.body.type;
@@ -54,7 +54,7 @@ exports.delete = (req, res) => {
 
 exports.setState = (req, res) => {
   Request.findById(req.params.request_id, (errFind, request) => {
-    if (errFind) { res.send(errFind); }
+    if (errFind) { res.send(errFind); return; }
     request.state = req.params.state;
     request.save((errSave) => {
       if (errSave) { res.json(errSave); }

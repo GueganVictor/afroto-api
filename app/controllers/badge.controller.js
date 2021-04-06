@@ -4,7 +4,7 @@ const Badge = db.badge;
 
 exports.index = (req, res) => {
   Badge.find({}, (err, badges) => {
-    if (err) { res.json({ status: 'error', message: err }); }
+    if (err) { res.json({ status: 'error', message: err }); return; }
     res.json({ status: 'success', message: 'Badges retrieved successfully', data: badges });
   });
 };
@@ -23,14 +23,14 @@ exports.new = (req, res) => {
 
 exports.view = (req, res) => {
   Badge.findById(req.params.badge_id, (err, badge) => {
-    if (err) { res.send(err); }
+    if (err) { res.send(err); return; }
     res.json({ message: 'Badge details loading..', data: badge });
   });
 };
 
 exports.update = (req, res) => {
   Badge.findById(req.params.badge_id, (err, badge) => {
-    if (err) { res.send(err); }
+    if (err) { res.send(err); return; }
     badge.name = req.body.name;
     badge.description = req.body.description;
     badge.type = req.body.type;
@@ -44,7 +44,7 @@ exports.update = (req, res) => {
 
 exports.delete = (req, res) => {
   Badge.deleteOne({ _id: req.params.badge_id }, (err) => {
-    if (err) { res.send(err); }
+    if (err) { res.send(err); return; }
     res.json({ status: 'success', message: 'Badge deleted' });
   });
 };
