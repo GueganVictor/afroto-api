@@ -2,7 +2,7 @@ import { Response, Request } from 'express';
 import { Project } from './../types/project';
 import SProject from './../models/project';
 
-const index = async (req: Request, res: Response): Promise<void> => {
+const indexProject = async (req: Request, res: Response): Promise<void> => {
     try {
         const projects: Project[] = await SProject.find();
         res.json({
@@ -16,7 +16,7 @@ const index = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-const view = async (req: Request, res: Response): Promise<void> => {
+const viewProject = async (req: Request, res: Response): Promise<void> => {
     try {
         const project: Project | null = await SProject.findById(req.params.project_id);
         res.json({
@@ -30,7 +30,7 @@ const view = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-const create = async (req: Request, res: Response): Promise<void> => {
+const createProject = async (req: Request, res: Response): Promise<void> => {
     try {
         const body = req.body as Pick<
             Project,
@@ -56,7 +56,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-const update = async (req: Request, res: Response): Promise<void> => {
+const updateProject = async (req: Request, res: Response): Promise<void> => {
     try {
         const {
             params: { id },
@@ -71,7 +71,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-const destroy = async (req: Request, res: Response): Promise<void> => {
+const destroyProject = async (req: Request, res: Response): Promise<void> => {
     try {
         const project: Project | null = await SProject.findByIdAndUpdate(req.params.project_id);
         res.json({ message: 'Project deleted', data: project });
@@ -80,7 +80,7 @@ const destroy = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-const setPhotographer = async (req: Request, res: Response): Promise<void> => {
+const setPhotographerToProject = async (req: Request, res: Response): Promise<void> => {
     try {
         const project: Project | null = await SProject.findByIdAndUpdate(
             { _id: req.params.project_id },
@@ -111,7 +111,7 @@ const validateProject = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-const indexByUser = async (req: Request, res: Response): Promise<void> => {
+const indexProjectByUser = async (req: Request, res: Response): Promise<void> => {
     try {
         const project: Project[] = await SProject.find({
             user: req.params.user_id,
@@ -127,4 +127,13 @@ const indexByUser = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-export { index, view, create, update, destroy };
+export {
+    indexProject,
+    viewProject,
+    createProject,
+    updateProject,
+    destroyProject,
+    indexProjectByUser,
+    validateProject,
+    setPhotographerToProject,
+};

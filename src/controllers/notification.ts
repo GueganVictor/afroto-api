@@ -2,7 +2,7 @@ import { Response, Request } from 'express';
 import { Notification } from './../types/notification';
 import SNotification from './../models/notification';
 
-const index = async (req: Request, res: Response): Promise<void> => {
+const indexNotification = async (req: Request, res: Response): Promise<void> => {
     try {
         const notifications: Notification[] = await SNotification.find();
         res.json({
@@ -16,7 +16,7 @@ const index = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-const view = async (req: Request, res: Response): Promise<void> => {
+const viewNotification = async (req: Request, res: Response): Promise<void> => {
     try {
         const notification: Notification | null = await SNotification.findById(
             req.params.notification_id,
@@ -32,7 +32,7 @@ const view = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-const create = async (req: Request, res: Response): Promise<void> => {
+const createNotification = async (req: Request, res: Response): Promise<void> => {
     try {
         const body = req.body as Pick<
             Notification,
@@ -48,7 +48,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-const update = async (req: Request, res: Response): Promise<void> => {
+const updateNotification = async (req: Request, res: Response): Promise<void> => {
     try {
         const {
             params: { notification_id },
@@ -65,7 +65,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-const destroy = async (req: Request, res: Response): Promise<void> => {
+const destroyNotification = async (req: Request, res: Response): Promise<void> => {
     try {
         const notification: Notification | null = await SNotification.findByIdAndUpdate(
             req.params.notification_id,
@@ -76,7 +76,7 @@ const destroy = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-const indexByUser = async (req: Request, res: Response): Promise<void> => {
+const indexNotificationByUser = async (req: Request, res: Response): Promise<void> => {
     try {
         const notifications: Notification[] = await SNotification.find({
             user: req.params.user_id,
@@ -92,4 +92,11 @@ const indexByUser = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-export { index, view, create, update, destroy, indexByUser };
+export {
+    indexNotification,
+    viewNotification,
+    createNotification,
+    updateNotification,
+    destroyNotification,
+    indexNotificationByUser,
+};
