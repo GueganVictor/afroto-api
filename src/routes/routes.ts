@@ -53,6 +53,7 @@ const routes = (app: Application) => {
     app.post(`${API_BASE}/project/:project_id/user/:user_id`,[], projectController.setPhotographerToProject );
     app.get(`${API_BASE}/project/user/:user_id`,[auth.isSameUserAsRequested], projectController.indexProjectByUser );
     app.post(`${API_BASE}/project/:project_id/validation`, [], projectController.validateProject);
+    app.post(`${API_BASE}/project/:project_id/acceptation`, [], projectController.acceptProject);
 
     // Notification routes
     app.get(`${API_BASE}/notification`, [auth.isAdmin], notificationController.indexNotification);

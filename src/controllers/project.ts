@@ -59,12 +59,17 @@ const createProject = async (req: Request, res: Response): Promise<void> => {
 const updateProject = async (req: Request, res: Response): Promise<void> => {
     try {
         const {
-            params: { id },
+            params: { project_id },
             body,
         } = req;
-        const project: Project | null = await SProject.findByIdAndUpdate({ _id: id }, body, {
-            omitUndefined: true,
-        });
+        console.log(project_id, body);
+        const project: Project | null = await SProject.findByIdAndUpdate(
+            { _id: project_id },
+            body,
+            {
+                omitUndefined: true,
+            },
+        );
         res.json({ message: 'Project infos updated', data: project });
     } catch (error) {
         res.json({ status: 'error', message: error });
@@ -111,15 +116,30 @@ const validateProject = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
+const acceptProject = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const project: Project | null = await SProject.findById({ _id: req.params.project_id });
+
+        project!.status = 'started';
+        //TODO sent notifications to others photographers
+        project!.photographer = req.body.photographer;
+        //TODO Mail validation
+        project!.save();
+        res.json({ message: 'Project Info updated', data: project });
+    } catch (error) {
+        res.json({ status: 'error', message: error });
+    }
+};
+
 const indexProjectByUser = async (req: Request, res: Response): Promise<void> => {
     try {
-        const project: Project[] = await SProject.find({
-            user: req.params.user_id,
+        const projects: Project[] = await SProject.find({
+            photographer: req.params.user_id,
         });
         res.json({
             status: 'success',
             message: 'Notifications retrieved successfully',
-            data: project,
+            data: projects,
         });
     } catch (error) {
         res.json({ status: 'error', message: error });
@@ -136,4 +156,5 @@ export {
     indexProjectByUser,
     validateProject,
     setPhotographerToProject,
+    acceptProject,
 };
