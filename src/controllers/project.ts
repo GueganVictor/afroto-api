@@ -59,12 +59,17 @@ const createProject = async (req: Request, res: Response): Promise<void> => {
 const updateProject = async (req: Request, res: Response): Promise<void> => {
     try {
         const {
-            params: { id },
+            params: { project_id },
             body,
         } = req;
-        const project: Project | null = await SProject.findByIdAndUpdate({ _id: id }, body, {
-            omitUndefined: true,
-        });
+        console.log(project_id, body);
+        const project: Project | null = await SProject.findByIdAndUpdate(
+            { _id: project_id },
+            body,
+            {
+                omitUndefined: true,
+            },
+        );
         res.json({ message: 'Project infos updated', data: project });
     } catch (error) {
         res.json({ status: 'error', message: error });
@@ -84,9 +89,10 @@ const setPhotographerToProject = async (req: Request, res: Response): Promise<vo
     try {
         const project: Project | null = await SProject.findByIdAndUpdate(
             { _id: req.params.project_id },
-            { photographer: req.params.user_id },
+            { photographer: req.params.user_id, status: 'pending' },
         );
         // mailer.newProjectMail(user);
+        // TODO Notifications
         res.json({ message: 'User added to project', data: project });
     } catch (error) {
         res.json({ status: 'error', message: error });
@@ -96,13 +102,34 @@ const setPhotographerToProject = async (req: Request, res: Response): Promise<vo
 const validateProject = async (req: Request, res: Response): Promise<void> => {
     try {
         const project: Project | null = await SProject.findById({ _id: req.params.project_id });
-        if (project?.status === 'Fini') {
+        if (project?.status === 'finished') {
             res.json({ status: 'error', message: 'Project was already closed' });
             return;
         }
 
         project!.pictures = req.body.url;
-        project!.status = 'Fini';
+        project!.status = 'finished';
+        //TODO Mail validation
+        project!.save();
+        res.json({ message: 'Project Info updated', data: project });
+    } catch (error) {
+        res.json({ status: 'error', message: error });
+    }
+};
+
+const acceptProject = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const project: Project | null = await SProject.findById({ _id: req.params.project_id });
+        console.log(req.body.action);
+        if (req.body.action === 'accept') {
+            project!.status = 'started';
+            //TODO sent notifications to others photographers
+            project!.photographer = req.body.photographer;
+        } else {
+            project!.status = 'created';
+            project!.photographer = [];
+        }
+
         //TODO Mail validation
         project!.save();
         res.json({ message: 'Project Info updated', data: project });
@@ -113,13 +140,13 @@ const validateProject = async (req: Request, res: Response): Promise<void> => {
 
 const indexProjectByUser = async (req: Request, res: Response): Promise<void> => {
     try {
-        const project: Project[] = await SProject.find({
-            user: req.params.user_id,
+        const projects: Project[] = await SProject.find({
+            photographer: req.params.user_id,
         });
         res.json({
             status: 'success',
             message: 'Notifications retrieved successfully',
-            data: project,
+            data: projects,
         });
     } catch (error) {
         res.json({ status: 'error', message: error });
@@ -136,4 +163,5 @@ export {
     indexProjectByUser,
     validateProject,
     setPhotographerToProject,
+    acceptProject,
 };
