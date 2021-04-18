@@ -33,6 +33,7 @@ mongoose
         console.error('Connection error', err);
         process.exit();
     });
+mongoose.set('useFindAndModify', false);
 
 // Routes
 routes(app);
