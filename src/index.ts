@@ -1,11 +1,11 @@
+import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import cors from 'cors';
 import mongoose from 'mongoose';
-
-import routes from './routes/routes';
+import path from 'path';
 import { createMissingRoles } from './config/setup.config';
-// import db from './models';
+import routes from './routes/routes';
+
 
 const app = express();
 
@@ -13,15 +13,15 @@ const app = express();
 
 dotenv.config();
 app.use(cors());
-app.use('/', express.static(`${__dirname}/public`));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Database connection
-const URI = process.env.MONGO_URI ?? '';
+const URI = process.env.NODE_ENV === 'production' ? process.env.MONGO_URI : process.env.MONGO_URI_DEV;
 
 mongoose
-    .connect(URI, {
+    .connect(URI ?? '', {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
@@ -36,6 +36,19 @@ mongoose
 mongoose.set('useFindAndModify', false);
 
 // Routes
+var history = require('connect-history-api-fallback');
+const staticFileMiddleware = express.static(path.join(__dirname + '/public'));
+app.use(staticFileMiddleware);
+app.use(
+    history({
+        disableDotRule: true,
+        verbose: true,
+    }),
+);
+app.use(staticFileMiddleware);
+app.get('/', function (req, res) {
+    res.render(path.join(__dirname + '/public/index.html'));
+});
 routes(app);
 
 // Listen

@@ -42,13 +42,11 @@ const createProject = async (req: Request, res: Response): Promise<void> => {
             | 'country'
             | 'remuneration'
             | 'dates'
-            | 'comments'
             | 'informations'
-            | 'pictures'
         >;
 
         const project: Project = new SProject(body);
-
+        project.status = 'created';
         const newProject: Project = await project.save();
         res.json({ message: 'New project created!', data: newProject });
     } catch (error) {
@@ -62,7 +60,6 @@ const updateProject = async (req: Request, res: Response): Promise<void> => {
             params: { project_id },
             body,
         } = req;
-        console.log(project_id, body);
         const project: Project | null = await SProject.findByIdAndUpdate(
             { _id: project_id },
             body,
@@ -78,7 +75,7 @@ const updateProject = async (req: Request, res: Response): Promise<void> => {
 
 const destroyProject = async (req: Request, res: Response): Promise<void> => {
     try {
-        const project: Project | null = await SProject.findByIdAndUpdate(req.params.project_id);
+        const project: Project | null = await SProject.findByIdAndRemove(req.params.project_id);
         res.json({ message: 'Project deleted', data: project });
     } catch (error) {
         res.json({ status: 'error', message: error });
@@ -120,7 +117,6 @@ const validateProject = async (req: Request, res: Response): Promise<void> => {
 const acceptProject = async (req: Request, res: Response): Promise<void> => {
     try {
         const project: Project | null = await SProject.findById({ _id: req.params.project_id });
-        console.log(req.body.action);
         if (req.body.action === 'accept') {
             project!.status = 'started';
             //TODO sent notifications to others photographers

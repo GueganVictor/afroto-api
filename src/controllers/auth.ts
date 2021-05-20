@@ -55,20 +55,24 @@ const signup = async (req: Request, res: Response): Promise<void> => {
 const signin = async (req: Request, res: Response): Promise<void> => {
     try {
         const user: User | null = await SUser.findOne({
-            $or: [{ email: req.body.username }, { username: req.body.username }],
+            $or: [
+                { email: req.body.username },
+                { username: req.body.username },
+                { phone: req.body.username },
+            ],
         })
             .populate('badges')
             .populate('-__v')
             .populate('roles');
 
         if (!user) {
-            res.status(404).send({ message: 'User Not found.' });
+            res.status(404).send({ message: 'LoginFailed' });
             return;
         }
 
         const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
         if (!passwordIsValid) {
-            res.status(401).send({ accessToken: null, message: 'Invalid Password!' });
+            res.status(401).send({ accessToken: null, message: 'LoginFailed' });
             return;
         }
 
