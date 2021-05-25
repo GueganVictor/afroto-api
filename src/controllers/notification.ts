@@ -1,6 +1,6 @@
-import { Response, Request } from 'express';
-import { Notification } from './../types/notification';
+import { Request, Response } from 'express';
 import SNotification from './../models/notification';
+import { Notification } from './../types/notification';
 
 const indexNotification = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -11,7 +11,7 @@ const indexNotification = async (req: Request, res: Response): Promise<void> => 
             data: notifications,
         });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
         return;
     }
 };
@@ -27,7 +27,7 @@ const viewNotification = async (req: Request, res: Response): Promise<void> => {
             data: notification,
         });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
         return;
     }
 };
@@ -44,7 +44,7 @@ const createNotification = async (req: Request, res: Response): Promise<void> =>
         const newNotification: Notification = await notification.save();
         res.json({ message: 'New notification created!', data: newNotification });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -61,7 +61,7 @@ const updateNotification = async (req: Request, res: Response): Promise<void> =>
         );
         res.json({ message: 'Notification infos updated', data: notification });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -72,7 +72,7 @@ const destroyNotification = async (req: Request, res: Response): Promise<void> =
         );
         res.json({ message: 'Notification deleted', data: notification });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -87,7 +87,7 @@ const indexNotificationByUser = async (req: Request, res: Response): Promise<voi
             data: notifications,
         });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
         return;
     }
 };

@@ -1,8 +1,7 @@
-import { Response, Request } from 'express';
-import { User } from './../types/user';
-import { Role } from './../types/role';
-import SUser from './../models/user';
+import { Request, Response } from 'express';
 import SRole from '../models/role';
+import SUser from './../models/user';
+import { User } from './../types/user';
 
 const indexUser = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -14,7 +13,7 @@ const indexUser = async (req: Request, res: Response): Promise<void> => {
             data: users,
         });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
         return;
     }
 };
@@ -28,7 +27,7 @@ const viewUser = async (req: Request, res: Response): Promise<void> => {
             data: user,
         });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
         return;
     }
 };
@@ -45,7 +44,7 @@ const createUser = async (req: Request, res: Response): Promise<void> => {
         const newUser: User = await user.save();
         res.json({ message: 'New user created!', data: newUser });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -60,7 +59,7 @@ const updateUser = async (req: Request, res: Response): Promise<void> => {
         });
         res.json({ message: 'User infos updated', data: user });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -69,7 +68,7 @@ const destroyUser = async (req: Request, res: Response): Promise<void> => {
         const user: User | null = await SUser.findByIdAndUpdate(req.params.user_id);
         res.json({ message: 'User deleted', data: user });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -92,7 +91,7 @@ const addEquipmentToUser = async (req: Request, res: Response): Promise<void> =>
         user!.save();
         res.json({ message: 'User Info updated', data: user });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -115,7 +114,7 @@ const removeEquipmentFromUser = async (req: Request, res: Response): Promise<voi
         user!.save();
         res.json({ message: 'User Info updated', data: user });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 

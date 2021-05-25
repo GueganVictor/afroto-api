@@ -1,6 +1,6 @@
-import { Response, Request } from 'express';
-import { Project } from './../types/project';
+import { Request, Response } from 'express';
 import SProject from './../models/project';
+import { Project } from './../types/project';
 
 const indexProject = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -11,7 +11,7 @@ const indexProject = async (req: Request, res: Response): Promise<void> => {
             data: projects,
         });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
         return;
     }
 };
@@ -25,7 +25,7 @@ const viewProject = async (req: Request, res: Response): Promise<void> => {
             data: project,
         });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
         return;
     }
 };
@@ -50,7 +50,7 @@ const createProject = async (req: Request, res: Response): Promise<void> => {
         const newProject: Project = await project.save();
         res.json({ message: 'New project created!', data: newProject });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -69,7 +69,7 @@ const updateProject = async (req: Request, res: Response): Promise<void> => {
         );
         res.json({ message: 'Project infos updated', data: project });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -78,7 +78,7 @@ const destroyProject = async (req: Request, res: Response): Promise<void> => {
         const project: Project | null = await SProject.findByIdAndRemove(req.params.project_id);
         res.json({ message: 'Project deleted', data: project });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -92,7 +92,7 @@ const setPhotographerToProject = async (req: Request, res: Response): Promise<vo
         // TODO Notifications
         res.json({ message: 'User added to project', data: project });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -110,7 +110,7 @@ const validateProject = async (req: Request, res: Response): Promise<void> => {
         project!.save();
         res.json({ message: 'Project Info updated', data: project });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -130,7 +130,7 @@ const acceptProject = async (req: Request, res: Response): Promise<void> => {
         project!.save();
         res.json({ message: 'Project Info updated', data: project });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -145,7 +145,7 @@ const indexProjectByUser = async (req: Request, res: Response): Promise<void> =>
             data: projects,
         });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
         return;
     }
 };

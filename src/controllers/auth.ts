@@ -1,13 +1,12 @@
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { Response, Request } from 'express';
-
-// const mailer = require('./mail.controller');
-
-import { User } from './../types/user';
+import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import SRole from './../models/role';
 import SUser from './../models/user';
 import { Role } from './../types/role';
-import SRole from './../models/role';
+// const mailer = require('./mail.controller');
+import { User } from './../types/user';
+
 
 const signup = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -48,7 +47,7 @@ const signup = async (req: Request, res: Response): Promise<void> => {
         // mailer.welcomeMail(userData);
         res.json({ message: 'New user created!', data: newUser });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -101,7 +100,7 @@ const signin = async (req: Request, res: Response): Promise<void> => {
             }),
         });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
         return;
     }
 };

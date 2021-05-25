@@ -1,6 +1,6 @@
-import { Response, Request as ExpressRequest } from 'express';
-import { Request } from './../types/request';
+import { Request as ExpressRequest, Response } from 'express';
 import SRequest from './../models/request';
+import { Request } from './../types/request';
 
 const indexRequest = async (req: ExpressRequest, res: Response): Promise<void> => {
     try {
@@ -11,7 +11,7 @@ const indexRequest = async (req: ExpressRequest, res: Response): Promise<void> =
             data: requests,
         });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
         return;
     }
 };
@@ -25,7 +25,7 @@ const viewRequest = async (req: ExpressRequest, res: Response): Promise<void> =>
             data: request,
         });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
         return;
     }
 };
@@ -38,11 +38,11 @@ const createRequest = async (req: ExpressRequest, res: Response): Promise<void> 
         >;
 
         const request: Request = new SRequest(body);
-
+        request.state = 'pending';
         const newRequest: Request = await request.save();
         res.json({ message: 'New request created!', data: newRequest });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -57,7 +57,7 @@ const updateRequest = async (req: ExpressRequest, res: Response): Promise<void> 
         });
         res.json({ message: 'Request infos updated', data: request });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -66,7 +66,7 @@ const destroyRequest = async (req: ExpressRequest, res: Response): Promise<void>
         const request: Request | null = await SRequest.findByIdAndUpdate(req.params.request_id);
         res.json({ message: 'Request deleted', data: request });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
@@ -78,8 +78,9 @@ const setRequestState = async (req: ExpressRequest, res: Response): Promise<void
         );
         res.json({ message: 'User added to request', data: request });
     } catch (error) {
-        res.json({ status: 'error', message: error });
+        res.status(500).json({ status: 'error', message: error });
     }
 };
 
 export { indexRequest, viewRequest, createRequest, updateRequest, destroyRequest, setRequestState };
+
