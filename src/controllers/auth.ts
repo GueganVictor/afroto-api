@@ -39,6 +39,7 @@ const signup = async (req: Request, res: Response): Promise<void> => {
             birthdate: body.birthdate,
             facebook: body.facebook,
             instagram: body.instagram,
+            hasRequestedChange: false,
             roles: rolesData.map((role) => role._id),
             password: bcrypt.hashSync(req.body.password, 8),
         });
@@ -95,6 +96,7 @@ const signin = async (req: Request, res: Response): Promise<void> => {
             cameras: user.cameras,
             lenses: user.lenses,
             badges: user.badges,
+            hasRequestedChange: user.hasRequestedChange,
             accessToken: jwt.sign({ id: user.id }, process.env.SECRET_KEY ?? '', {
                 expiresIn: 86400,
             }),
@@ -106,3 +108,4 @@ const signin = async (req: Request, res: Response): Promise<void> => {
 };
 
 export { signin, signup };
+

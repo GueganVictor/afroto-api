@@ -1,10 +1,18 @@
 import { Request as ExpressRequest, Response } from 'express';
+import SUser from '../models/user';
 import SRequest from './../models/request';
 import { Request } from './../types/request';
 
 const indexRequest = async (req: ExpressRequest, res: Response): Promise<void> => {
     try {
-        const requests: Request[] = await SRequest.find();
+        const requests: Request[] = await SRequest.find()
+            .populate({
+                path: "photographer",
+                select: { name: 1 }
+            }).populate({
+                path: "badges",
+                select: { name: 1 }
+            });
         res.json({
             status: 'success',
             message: 'Requests retrieved successfully',
@@ -36,7 +44,9 @@ const createRequest = async (req: ExpressRequest, res: Response): Promise<void> 
             Request,
             'state' | 'badges' | 'photographer' | 'url' | 'description' | 'type'
         >;
-
+        const photographer = await SUser.findById(req.body.photographer);
+        photographer!.hasRequestedChange = true;
+        photographer?.save();
         const request: Request = new SRequest(body);
         request.state = 'pending';
         const newRequest: Request = await request.save();

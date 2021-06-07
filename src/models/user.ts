@@ -1,5 +1,5 @@
-import { User } from '../types/user';
 import { model, Schema } from 'mongoose';
+import { User } from '../types/user';
 
 const userSchema: Schema = new Schema({
     username: String,
@@ -14,6 +14,7 @@ const userSchema: Schema = new Schema({
     facebook: String,
     instagram: String,
     about: String,
+    hasRequestedChange: Boolean,
     badges: [
         {
             type: Schema.Types.ObjectId,

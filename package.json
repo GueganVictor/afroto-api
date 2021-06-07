@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "builder": "cd ../afroto-client && npm run build && cd ../afroto-api && rm -rf dist/js/public && cp -r ../afroto-client/dist dist/js/public && cp package.json dist/js ",
     "start": "concurrently -k -n \"Typescript,Node\" -p \"[{name}]\" -c \"blue,green\" \"tsc --watch\" \"nodemon dist/js/index.js\""
   },
   "repository": {

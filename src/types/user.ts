@@ -15,6 +15,7 @@ export interface User extends Document {
     facebook: string;
     instagram: string;
     about: string;
+    hasRequestedChange: boolean;
     badges: Badge['_id'];
     roles: Role['_id'];
 }

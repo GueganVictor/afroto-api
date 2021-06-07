@@ -61,11 +61,7 @@ const updateProject = async (req: Request, res: Response): Promise<void> => {
             body,
         } = req;
         const project: Project | null = await SProject.findByIdAndUpdate(
-            { _id: project_id },
-            body,
-            {
-                omitUndefined: true,
-            },
+            { _id: project_id }, body, { omitUndefined: true, },
         );
         res.json({ message: 'Project infos updated', data: project });
     } catch (error) {
@@ -161,3 +157,4 @@ export {
     setPhotographerToProject,
     acceptProject,
 };
+
